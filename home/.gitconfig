@@ -1,0 +1,6 @@
+[user]
+	name = Willian S. de Souza
+	email = willianstosouza@gmail.com
+[alias]
+	tree = log --all --graph --decorate --pretty=oneline --abbrev-commit
+	ignore = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
