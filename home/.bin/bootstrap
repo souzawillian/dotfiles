@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+# bootstrap setup for arch linux contains install/configure instructions
+
+export EDITOR=vim
+PKGLIST=~/.bin/pkgs
+PKGLOG=~/.pacaur.log
+
+SHRC=~/.zshrc
+
+# pacman update
+sudo pacman -Syu --needed
+
+# pacman install  dependencies
+sudo pacman -S --noconfirm --needed pacaur git
+
+
+# sync sensitive - not versioned - dotfiles
+ln -sf ~/Dropbox ~/Cloud
+ln -sf ~/Cloud/sync/history ~/.history
+ln -sf ~/Cloud/sync/env ~/.env
+ln -sf ~/Cloud/sync/chaordic-utils ~/.chaordic-utils
+# ln -sf ~/Cloud/sync/ssh_config ~/.ssh/config
+# ln -sf ~/Cloud/sync/copyq.conf ~/.config/copyq/copyq.conf
+
+
+echo "[ bootstrap ] :: Installing pacman/aur packages"
+for PKG in $(cat $PKGLIST); do
+    pacaur -S --needed --noedit --noconfirm ${PKG} || echo "$PKG failed." >> $PKGLOG
+done
+
+# install oh-my-zsh
+if [ ! -d ~/.oh-my-zsh ]; then
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
+
+# install and configure homeshick
+if [ ! -d ~/.homesick ]; then
+	echo "[ bootstrap ] :: Install homeshick"
+	git clone https://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
+	if [[ -f $SHRC ]]; then
+		printf '\nsource "~/.homesick/repos/homeshick/homeshick.sh"' >> $SHRC
+		printf '\nsource "~/.homesick/repos/homeshick/completions/homeshick-completion.bash"' >> $SHRC
+	fi
+fi
+
+# install asdf
+if [ ! -d ~/.asdf ]; then
+  	echo "[ bootstrap ] :: Install asdf"
+	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.2
+	if [[ -f $SHRC ]]; then		
+		echo -e '\n# configure asdf\nsource ~/.asdf/asdf.sh' >> $SHRC
+		echo -e '\nsource ~/.asdf/completions/asdf.bash' >> $SHRC
+	fi
+fi
+
+# configure aws-cli autocompleter
+if [[ -x "/usr/bin/aws_zsh_completer.sh" ]]; then
+	echo -e '\nsource /usr/bin/aws_zsh_completer.sh' >> $SHRC
+fi
+
+echo -e '\nsource ~/.customrc' >> $SHRC
+
+###### Configs
+sudo timedatectl set-ntp true	# enable ntp on timedate
+if [[ -x "$(command -v docker)" ]]; then
+	systemctl start docker			# start docker service
+	systemctl enable docker			# configure Docker to start on boot
+	sudo groupadd docker			# create the docker group
+	sudo usermod -aG docker $USER	# add my user to the docker group
+fi
+
+
+# install fzf
+# if [ ! -d ~/.fzf ]; then
+#   echo "[ bootstrap ] :: Install fzf"
+#   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+#   ~/.fzf/install
+# else
+#   echo "[ bootstrap ] :: fzf already installed!"
+# fi
