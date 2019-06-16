@@ -3,10 +3,10 @@
 # bootstrap setup for arch linux contains install/configure instructions
 
 export EDITOR=vim
-PKGLIST=~/.bin/pkgs
-PKGLOG=~/.pacaur.log
+PKGLIST=${HOME}/.bin/pkgs
+PKGLOG=${HOME}/.pacaur.log
 
-SHRC=~/.zshrc
+SHRC=${HOME}/.zshrc
 
 # pacman update
 sudo pacman -Syu --needed
@@ -16,12 +16,12 @@ sudo pacman -S --noconfirm --needed pacaur git
 
 
 # sync sensitive - not versioned - dotfiles
-ln -sf ~/Dropbox ~/Cloud
-ln -sf ~/Cloud/sync/history ~/.history
-ln -sf ~/Cloud/sync/env ~/.env
-ln -sf ~/Cloud/sync/chaordic-utils ~/.chaordic-utils
-# ln -sf ~/Cloud/sync/ssh_config ~/.ssh/config
-# ln -sf ~/Cloud/sync/copyq.conf ~/.config/copyq/copyq.conf
+ln -sf "${HOME}/Dropbox" "${HOME}/Cloud"
+ln -sf "${HOME}/Cloud/sync/history" "${HOME}/.history"
+ln -sf "${HOME}/Cloud/sync/env" "${HOME}/.env"
+ln -sf "${HOME}/Cloud/sync/chaordic-utils" "${HOME}/.chaordic-utils"
+# ln -sf ${HOME}/Cloud/sync/ssh_config ${HOME}/.ssh/config
+# ln -sf ${HOME}/Cloud/sync/copyq.conf ${HOME}/.config/copyq/copyq.conf
 
 
 echo "[ bootstrap ] :: Installing pacman/aur packages"
@@ -30,52 +30,71 @@ for PKG in $(cat $PKGLIST); do
 done
 
 # install oh-my-zsh
-if [ ! -d ~/.oh-my-zsh ]; then
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+if [ ! -d ${HOME}/.oh-my-zsh ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 fi
 
 # install and configure homeshick
-if [ ! -d ~/.homesick ]; then
-	echo "[ bootstrap ] :: Install homeshick"
-	git clone https://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
-	if [[ -f $SHRC ]]; then
-		printf '\nsource "~/.homesick/repos/homeshick/homeshick.sh"' >> $SHRC
-		printf '\nsource "~/.homesick/repos/homeshick/completions/homeshick-completion.bash"' >> $SHRC
-	fi
+if [ ! -d ${HOME}/.homesick ]; then
+    echo "[ bootstrap ] :: Install homeshick"
+    git clone https://github.com/andsens/homeshick.git "${HOME}/.homesick/repos/homeshick"
+
+    if [[ -f $SHRC ]]; then
+        printf '\nsource "${HOME}/.homesick/repos/homeshick/homeshick.sh"' >> $SHRC
+        printf '\nsource "${HOME}/.homesick/repos/homeshick/completions/homeshick-completion.bash"' >> $SHRC
+    fi
 fi
 
-# install asdf
-if [ ! -d ~/.asdf ]; then
-  	echo "[ bootstrap ] :: Install asdf"
-	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.2
-	if [[ -f $SHRC ]]; then		
-		echo -e '\n# configure asdf\nsource ~/.asdf/asdf.sh' >> $SHRC
-		echo -e '\nsource ~/.asdf/completions/asdf.bash' >> $SHRC
-	fi
+# install pyenv
+if [ ! -d ${HOME}/.pyenv ]; then
+    echo "[ bootstrap ] :: Install pyenv"
+    curl https://pyenv.run | bash
+
+    echo -e "\n# configure pyenv" >> $SHRC
+    echo -e '\nexport PATH="${HOME}/.pyenv/bin:$PATH"' >> $SHRC
+
+    echo -e '\neval "$(pyenv init -)"' >> $SHRC
+    echo -e '\neval "$(pyenv virtualenv-init -)"' >> $SHRC
+fi
+
+# install nvm
+if [ ! -d ${HOME}/.nvm ]; then
+    echo "[ bootstrap ] :: Install nvm"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+
+    echo -e "\n# configure nvm" >> $SHRC
+    echo -e '\nexport NVM_DIR="${HOME}/.nvm"' >> $SHRC
+    echo -e '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm' >> $SHRC
 fi
 
 # configure aws-cli autocompleter
 if [[ -x "/usr/bin/aws_zsh_completer.sh" ]]; then
-	echo -e '\nsource /usr/bin/aws_zsh_completer.sh' >> $SHRC
+    echo -e '\nsource /usr/bin/aws_zsh_completer.sh' >> $SHRC
 fi
 
-echo -e '\nsource ~/.customrc' >> $SHRC
+echo -e '\nsource ${HOME}/.customrc' >> $SHRC
+
+# update zsh with my customizations
+sed -i -r 's/^(ZSH_THEME=).*$/\1"robinho"/' $SHRC
+sed -i -r 's/^(plugins=).*$/\1(git npm python-prompt tmux wd)/' $SHRC
 
 ###### Configs
-sudo timedatectl set-ntp true	# enable ntp on timedate
+sudo timedatectl set-ntp true  # enable ntp on timedate
 if [[ -x "$(command -v docker)" ]]; then
-	systemctl start docker			# start docker service
-	systemctl enable docker			# configure Docker to start on boot
-	sudo groupadd docker			# create the docker group
-	sudo usermod -aG docker $USER	# add my user to the docker group
+    systemctl start docker      # start docker service
+    systemctl enable docker     # configure Docker to start on boot
+
+    sudo groupadd docker          # create the docker group
+    sudo usermod -aG docker $USER # add my user to the docker group
 fi
 
+plugins=(git npm python-prompt tmux wd)
 
 # install fzf
-# if [ ! -d ~/.fzf ]; then
+# if [ ! -d ${HOME}/.fzf ]; then
 #   echo "[ bootstrap ] :: Install fzf"
-#   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-#   ~/.fzf/install
+#   git clone --depth 1 https://github.com/junegunn/fzf.git ${HOME}/.fzf
+#   ${HOME}/.fzf/install
 # else
 #   echo "[ bootstrap ] :: fzf already installed!"
 # fi

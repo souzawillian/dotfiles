@@ -8,6 +8,7 @@ firefox
 fzf
 google-chrome
 htop
+insomnia
 jq
 make
 ncdu
@@ -25,6 +26,7 @@ pulseaudio-alsa
 python
 python-pip
 rofi
+slack-desktop
 sublime-text-dev
 termite
 tmux
