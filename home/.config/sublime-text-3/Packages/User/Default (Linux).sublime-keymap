@@ -1,0 +1,4 @@
+[
+  { "keys": ["ctrl+k"], "command": "set_mark" },
+  { "keys": ["ctrl+space"], "command": "auto_complete" }
+]
