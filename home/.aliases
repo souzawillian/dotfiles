@@ -25,8 +25,6 @@ alias l='ls -lh'
 alias la='ls -a'
 alias ll='ls -lah'
 
-alias subl='/opt/sublime_text_3/sublime_text'
-
 # }}}
 # Git aliases           ----------------------------------------------------- {{{
 

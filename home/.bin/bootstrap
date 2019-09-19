@@ -29,6 +29,11 @@ for PKG in $(cat $PKGLIST); do
     pacaur -S --needed --noedit --noconfirm ${PKG} || echo "$PKG failed." >> $PKGLOG
 done
 
+if [ -x "$(command -v subl3)" ]; then
+    old_subl="$(command -v subl3)"
+    sudo mv "${old_subl}" "$(echo ${old_subl} | sed 's/subl3/subl/')"
+fi
+
 # install oh-my-zsh
 if [ ! -d ${HOME}/.oh-my-zsh ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -87,8 +92,6 @@ if [[ -x "$(command -v docker)" ]]; then
     sudo groupadd docker          # create the docker group
     sudo usermod -aG docker $USER # add my user to the docker group
 fi
-
-plugins=(git npm python-prompt tmux wd)
 
 # install fzf
 # if [ ! -d ${HOME}/.fzf ]; then
