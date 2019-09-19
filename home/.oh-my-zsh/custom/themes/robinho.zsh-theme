@@ -22,7 +22,7 @@ precmd() {
 st_green="$FG[190]"
 st_red="$FG[124]"
 local ret_status="%(?:${st_green}❯ :${st_red}❯ )"
-PROMPT="${ret_status}"
+PROMPT="${ret_status}%{$reset_color%}"
 RPROMPT="%F{8}${SSH_TTY:+%n@%m}%f"    # Display username if connected via SSH
 
 # ------------------------------------------------------------------------------

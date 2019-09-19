@@ -37,6 +37,7 @@ fi
 # install oh-my-zsh
 if [ ! -d ${HOME}/.oh-my-zsh ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
 # install and configure homeshick
@@ -81,7 +82,7 @@ echo -e '\nsource ${HOME}/.customrc' >> $SHRC
 
 # update zsh with my customizations
 sed -i -r 's/^(ZSH_THEME=).*$/\1"robinho"/' $SHRC
-sed -i -r 's/^(plugins=).*$/\1(git npm python-prompt tmux wd)/' $SHRC
+sed -i -r 's/^(plugins=).*$/\1(git npm python-prompt tmux wd zsh-autosuggestions)/' $SHRC
 
 ###### Configs
 sudo timedatectl set-ntp true  # enable ntp on timedate

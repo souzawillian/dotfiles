@@ -72,7 +72,7 @@ alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 
 alias gp='git push'
-alias ggpush="git push origin (git_current_branch)"
+alias ggpush="git push origin $(git_current_branch)"
 
 alias gl='git pull'
 
