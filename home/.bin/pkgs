@@ -1,7 +1,6 @@
 # arch packages
 aws-cli
 clipit
-code
 docker
 dropbox
 firefox
@@ -9,6 +8,7 @@ fzf
 google-chrome
 htop
 insomnia
+jdk-openjdk
 jq
 make
 ncdu
@@ -33,9 +33,9 @@ tmux
 unrar
 unzip
 vim
+visual-studio-code-bin
 wget
 xautolock
 xclip
 youtube-dl
-youtube-viewer
 zsh

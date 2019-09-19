@@ -122,8 +122,6 @@ alias tk='tmux kill-session -t'
 # copyright 2007 - 2010 Christopher Bratusek
 alias wininfo='xprop | grep -w "WM_NAME\|WM_CLASS\|WM_WINDOW_ROLE\|_NET_WM_STATE"'
 
-# Youtube client
-alias tube-vw='youtube-viewer -C'
 # Download youtube videos (require youtube-dl)
 alias vtube='youtube-dl -c'
 # Extract just the audio from youtube videos
