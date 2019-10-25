@@ -8,6 +8,9 @@ PKGLOG=${HOME}/.pacaur.log
 
 SHRC=${HOME}/.zshrc
 
+# configure keyboard layout
+sudo setxkbmap -model abnt2 -layout br -variant abnt2
+
 # pacman update
 sudo pacman -Syu --needed
 
@@ -23,6 +26,17 @@ ln -sf "${HOME}/Cloud/sync/chaordic-utils" "${HOME}/.chaordic-utils"
 # ln -sf ${HOME}/Cloud/sync/ssh_config ${HOME}/.ssh/config
 # ln -sf ${HOME}/Cloud/sync/copyq.conf ${HOME}/.config/copyq/copyq.conf
 
+
+echo "[ bootstrap ] :: Include new repo pritunl vpn client to pacman"
+if grep -qxF '[multilib]' /etc/pacman.conf; then
+    sudo tee -a /etc/pacman.conf << EOF
+[pritunl]
+Server = https://repo.pritunl.com/stable/pacman
+EOF
+
+    sudo pacman-key --keyserver hkp://keyserver.ubuntu.com -r 7568D9BB55FF9E5287D586017AE645C0CF8E292A
+    sudo pacman-key --lsign-key 7568D9BB55FF9E5287D586017AE645C0CF8E292A
+fi
 
 echo "[ bootstrap ] :: Installing pacman/aur packages"
 for PKG in $(cat $PKGLIST); do
@@ -43,9 +57,16 @@ fi
 # install and configure homeshick
 if [ ! -d ${HOME}/.homesick ]; then
     echo "[ bootstrap ] :: Install homeshick"
+
     git clone https://github.com/andsens/homeshick.git "${HOME}/.homesick/repos/homeshick"
 
     if [[ -f $SHRC ]]; then
+        printf '\n# ZSH, load and run bashcompinit before calling the complete function.' >> $SHRC
+        printf '\nif [[ -n ${ZSH_VERSION-} ]]; then' >> $SHRC
+        printf '\n\tautoload -U +X bashcompinit && bashcompinit' >> $SHRC
+        printf '\n\tautoload -U +X compinit && compinit' >> $SHRC
+        printf '\nfi' >> $SHRC
+
         printf '\nsource "${HOME}/.homesick/repos/homeshick/homeshick.sh"' >> $SHRC
         printf '\nsource "${HOME}/.homesick/repos/homeshick/completions/homeshick-completion.bash"' >> $SHRC
     fi
@@ -93,6 +114,9 @@ if [[ -x "$(command -v docker)" ]]; then
     sudo groupadd docker          # create the docker group
     sudo usermod -aG docker $USER # add my user to the docker group
 fi
+
+# Enable the SSH service
+systemctl enable --now sshd.service
 
 # install fzf
 # if [ ! -d ${HOME}/.fzf ]; then

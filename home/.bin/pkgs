@@ -38,5 +38,6 @@ visual-studio-code-bin
 wget
 xautolock
 xclip
-youtube-dl
+xorg-xbacklight
+xorg-xwininfo
 zsh

@@ -18,15 +18,18 @@ set $TMUX       termite -t main -e "$HOME/.bin/tmuxsession main"
 # exec --no-startup-id start_conky_green
 # exec_always --no-startup-id sbxkb
 
-exec --no-startup-id xfce4-power-manager
 exec --no-startup-id nm-applet
+exec --no-startup-id source ~/.env
+exec --no-startup-id autorandr --change
+exec --no-startup-id xfce4-power-manager
+exec --no-startup-id dropbox
 exec --no-startup-id nitrogen --restore; sleep 1; compton -b
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id clipit
 exec --no-startup-id pamac-tray
 exec --no-startup-id start_conky_maia
-exec --no-startup-id xautolock -time 20 -locker blurlock
-exec --no-startup-id pritunl-client-gtk
+exec --no-startup-id xautolock -time 5 -locker blurlock
+exec --no-startup-id pritunl-client-electron
 
 exec_always --no-startup-id ff-theme-utilf
 exec_always --no-startup-id fix_xcursor
@@ -72,7 +75,7 @@ font xft:URWGothic-Book 11
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
-# disable mouse warp to the center of the window 
+# disable mouse warp to the center of the window
 mouse_warping none
 
 # }}}
@@ -249,32 +252,33 @@ bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 # assign [class="Skype"] $ws5
 
 # Open specific applications in floating mode
-for_window [title="alsamixer"] floating enable border pixel 1
+for_window [class="(?i)System-config-printer.py"] floating enable border normal
+for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="calamares"] floating enable border normal
 for_window [class="Clipgrab"] floating enable
-for_window [title="File Transfer*"] floating enable
 for_window [class="Galculator"] floating enable border pixel 1
 for_window [class="GParted"] floating enable border normal
-for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lightdm-settings"] floating enable
 for_window [class="Lxappearance"] floating enable sticky enable border normal
-for_window [class="Manjaro-hello"] floating enable
 for_window [class="Manjaro Settings Manager"] floating enable border normal
-for_window [title="MuseScore: Play Panel"] floating enable
+for_window [class="Manjaro-hello"] floating enable
 for_window [class="Nitrogen"] floating enable sticky enable border normal
 for_window [class="Oblogout"] fullscreen enable
 for_window [class="octopi"] floating enable
-for_window [title="About Pale Moon"] floating enable
 for_window [class="Pamac-manager"] floating enable
 for_window [class="Pavucontrol"] floating enable
+for_window [class="pritunl"] floating enable
 for_window [class="qt5ct"] floating enable sticky enable border normal
 for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
 for_window [class="Simple-scan"] floating enable border normal
-for_window [class="(?i)System-config-printer.py"] floating enable border normal
 for_window [class="Skype"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
-for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="Xfburn"] floating enable
+for_window [title="About Pale Moon"] floating enable
+for_window [title="alsamixer"] floating enable border pixel 1
+for_window [title="File Transfer*"] floating enable
+for_window [title="i3_help"] floating enable sticky enable border normal
+for_window [title="MuseScore: Play Panel"] floating enable
 
 # switch to workspace with urgent window automatically
 for_window [urgent=latest] focus
@@ -308,7 +312,7 @@ mode "$mode_system" {
 # Change the variable name at the place you want to match the color
 # of your terminal like this:
 # [example]
-# If you want your bar to have the same background color as your 
+# If you want your bar to have the same background color as your
 # terminal background change the line 362 from:
 # background #14191D
 # to:
@@ -371,7 +375,7 @@ bindsym $mod+m bar mode toggle
   client.focused_inactive #2F3D44 #2F3D44 #1ABC9C #454948
   client.unfocused        #2F3D44 #2F3D44 #1ABC9C #454948
   client.urgent           #CB4B16 #FDF6E3 #1ABC9C #268BD2
-  client.placeholder      #000000 #0c0c0c #ffffff #000000 
+  client.placeholder      #000000 #0c0c0c #ffffff #000000
 
   client.background       #2B2C2B
 
@@ -391,7 +395,7 @@ gaps outer -2
 # Smart gaps (gaps used if only more than one container on the workspace)
 smart_gaps on
 
-# Smart borders (draw borders around container only if it is not the only container on this workspace) 
+# Smart borders (draw borders around container only if it is not the only container on this workspace)
 # on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
 smart_borders on
 
