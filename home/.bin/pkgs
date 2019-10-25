@@ -1,4 +1,5 @@
 # arch packages
+autorandr
 aws-cli
 clipit
 docker
