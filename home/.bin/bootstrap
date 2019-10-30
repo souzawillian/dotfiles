@@ -6,23 +6,32 @@ export EDITOR=vim
 PKGLIST=${HOME}/.bin/pkgs
 PKGLOG=${HOME}/.pacaur.log
 SHRC=${HOME}/.zshrc
+GO_VERSION=1.13.3
 
+# Basic configurations
+sudo chown -R $USER:$USER /opt
 # configure keyboard layout
 sudo setxkbmap -model abnt2 -layout br -variant abnt2
 
 # pacman update
 sudo pacman -Syu --needed
-
 # pacman install  dependencies
 sudo pacman -S --noconfirm --needed pacaur git
 
+# install GOLANG
+if [[ ! -d /usr/local/go ]]; then
+  echo "[ bootstrap ] :: Installing GOLANG"
+  curl "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" | tar xzf -C /usr/local
+  printf "\n# Configure GOLANG\n" >> $SHRC
+  printf 'export PATH="$PATH:/usr/local/go/bin"\n' >> $SHRC
+fi
 
 # sync sensitive - not versioned - dotfiles
 ln -sf "${HOME}/Dropbox" "${HOME}/Cloud"
 ln -sf "${HOME}/Cloud/sync/history" "${HOME}/.history"
 ln -sf "${HOME}/Cloud/sync/env" "${HOME}/.env"
 ln -sf "${HOME}/Cloud/sync/chaordic-utils" "${HOME}/.chaordic-utils"
-# ln -sf ${HOME}/Cloud/sync/ssh_config ${HOME}/.ssh/config
+ln -sf "${HOME}/Cloud/sync/ssh_config ${HOME}/.ssh/config"
 # ln -sf ${HOME}/Cloud/sync/copyq.conf ${HOME}/.config/copyq/copyq.conf
 
 
@@ -50,24 +59,24 @@ fi
 # install oh-my-zsh
 if [ ! -d ${HOME}/.oh-my-zsh ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git clone "https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 fi
 
 # install and configure homeshick
-if [ ! -d ${HOME}/.homesick ]; then
+if [ ! -d "${HOME}/.homesick" ]; then
     echo "[ bootstrap ] :: Install homeshick"
 
     git clone https://github.com/andsens/homeshick.git "${HOME}/.homesick/repos/homeshick"
 
     if [[ -f $SHRC ]]; then
-        printf '\n# ZSH, load and run bashcompinit before calling the complete function.' >> $SHRC
-        printf '\nif [[ -n ${ZSH_VERSION-} ]]; then' >> $SHRC
-        printf '\n\tautoload -U +X bashcompinit && bashcompinit' >> $SHRC
-        printf '\n\tautoload -U +X compinit && compinit' >> $SHRC
-        printf '\nfi' >> $SHRC
+        printf '\n# ZSH, load and run bashcompinit before calling the complete function.\n' >> $SHRC
+        printf 'if [[ -n ${ZSH_VERSION-} ]]; then\n' >> $SHRC
+        printf '\tautoload -U +X bashcompinit && bashcompinit\n' >> $SHRC
+        printf '\tautoload -U +X compinit && compinit\n' >> $SHRC
+        printf 'fi\n' >> $SHRC
 
-        printf '\nsource "${HOME}/.homesick/repos/homeshick/homeshick.sh"' >> $SHRC
-        printf '\nsource "${HOME}/.homesick/repos/homeshick/completions/homeshick-completion.bash"' >> $SHRC
+        printf '\nsource "${HOME}/.homesick/repos/homeshick/homeshick.sh\n"' >> $SHRC
+        printf 'source "${HOME}/.homesick/repos/homeshick/completions/homeshick-completion.bash\n"' >> $SHRC
     fi
 fi
 
@@ -76,11 +85,10 @@ if [ ! -d ${HOME}/.pyenv ]; then
     echo "[ bootstrap ] :: Install pyenv"
     curl https://pyenv.run | bash
 
-    echo -e "\n# configure pyenv" >> $SHRC
-    echo -e '\nexport PATH="${HOME}/.pyenv/bin:$PATH"' >> $SHRC
-
-    echo -e '\neval "$(pyenv init -)"' >> $SHRC
-    echo -e '\neval "$(pyenv virtualenv-init -)"' >> $SHRC
+    printf '\n# configure pyenv\n' >> $SHRC
+    printf 'export PATH="${HOME}/.pyenv/bin:$PATH"\n' >> $SHRC
+    printf 'eval "$(pyenv init -)"\n' >> $SHRC
+    printf 'eval "$(pyenv virtualenv-init -)"\n' >> $SHRC
 fi
 
 # install nvm
@@ -88,17 +96,17 @@ if [ ! -d ${HOME}/.nvm ]; then
     echo "[ bootstrap ] :: Install nvm"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 
-    echo -e "\n# configure nvm" >> $SHRC
-    echo -e '\nexport NVM_DIR="${HOME}/.nvm"' >> $SHRC
-    echo -e '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm' >> $SHRC
+    printf "\n# configure nvm\n" >> $SHRC
+    printf 'export NVM_DIR="${HOME}/.nvm"\n' >> $SHRC
+    printf '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm\n' >> $SHRC
 fi
 
 # configure aws-cli autocompleter
 if [[ -x "/usr/bin/aws_zsh_completer.sh" ]]; then
-    echo -e '\nsource /usr/bin/aws_zsh_completer.sh' >> $SHRC
+    printf '\nsource /usr/bin/aws_zsh_completer.sh\n' >> $SHRC
 fi
 
-echo -e '\nsource ${HOME}/.customrc' >> $SHRC
+printf '\nsource ${HOME}/.customrc\n' >> $SHRC
 
 # update zsh with my customizations
 sed -i -r 's/^(ZSH_THEME=).*$/\1"robinho"/' $SHRC
