@@ -5,7 +5,6 @@
 export EDITOR=vim
 PKGLIST=${HOME}/.bin/pkgs
 PKGLOG=${HOME}/.pacaur.log
-
 SHRC=${HOME}/.zshrc
 
 # configure keyboard layout
