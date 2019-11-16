@@ -32,8 +32,14 @@ ln -sf "${HOME}/Cloud/sync/history" "${HOME}/.history"
 ln -sf "${HOME}/Cloud/sync/env" "${HOME}/.env"
 ln -sf "${HOME}/Cloud/sync/chaordic-utils" "${HOME}/.chaordic-utils"
 ln -sf "${HOME}/Cloud/sync/ssh_config ${HOME}/.ssh/config"
-# ln -sf ${HOME}/Cloud/sync/copyq.conf ${HOME}/.config/copyq/copyq.conf
+# AWS credentials
+ln -sf "${HOME}/Cloud/sync/aws_config/credential.chaordic-dc ${HOME}/.aws/credential.chaordic-dc"
+ln -sf "${HOME}/Cloud/sync/aws_config/credential.ci-jake ${HOME}/.aws/credential.ci-jake"
+ln -sf "${HOME}/Cloud/sync/aws_config/credential.ci-jake ${HOME}/.aws/credential.ci-jake"
+ln -sf "${HOME}/Cloud/sync/aws_config/credential.prod-chaordic ${HOME}/.aws/credential.prod-chaordic"
+ln -sf "${HOME}/Cloud/sync/aws_config/.aws-profile.json ${HOME}/.aws-profile.json"
 
+# ln -sf ${HOME}/Cloud/sync/copyq.conf ${HOME}/.config/copyq/copyq.conf
 
 echo "[ bootstrap ] :: Include new repo pritunl vpn client to pacman"
 if grep -qxF '[multilib]' /etc/pacman.conf; then
