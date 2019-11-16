@@ -24,6 +24,7 @@ if [[ ! -d /usr/local/go ]]; then
   curl "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" | tar xzf -C /usr/local
   printf "\n# Configure GOLANG\n" >> $SHRC
   printf 'export PATH="$PATH:/usr/local/go/bin"\n' >> $SHRC
+  printf 'export PATH="$PATH:${HOME}/go/bin"\n' >> $SHRC
 fi
 
 # sync sensitive - not versioned - dotfiles
@@ -33,8 +34,8 @@ ln -sf "${HOME}/Cloud/sync/env" "${HOME}/.env"
 ln -sf "${HOME}/Cloud/sync/chaordic-utils" "${HOME}/.chaordic-utils"
 ln -sf "${HOME}/Cloud/sync/ssh_config ${HOME}/.ssh/config"
 # AWS credentials
+ln -sf "${HOME}/Cloud/sync/aws_config/config" "${HOME}/.aws/config"
 ln -sf "${HOME}/Cloud/sync/aws_config/credential.chaordic-dc ${HOME}/.aws/credential.chaordic-dc"
-ln -sf "${HOME}/Cloud/sync/aws_config/credential.ci-jake ${HOME}/.aws/credential.ci-jake"
 ln -sf "${HOME}/Cloud/sync/aws_config/credential.ci-jake ${HOME}/.aws/credential.ci-jake"
 ln -sf "${HOME}/Cloud/sync/aws_config/credential.prod-chaordic ${HOME}/.aws/credential.prod-chaordic"
 ln -sf "${HOME}/Cloud/sync/aws_config/.aws-profile.json ${HOME}/.aws-profile.json"
@@ -72,7 +73,9 @@ fi
 if [ ! -d "${HOME}/.homesick" ]; then
     echo "[ bootstrap ] :: Install homeshick"
 
-    git clone https://github.com/andsens/homeshick.git "${HOME}/.homesick/repos/homeshick"
+    bash <(curl https://raw.githubusercontent.com/wilsouza/dotfiles/master/homeshick.sh)
+
+    # git clone https://github.com/andsens/homeshick.git "${HOME}/.homesick/repos/homeshick"
 
     if [[ -f $SHRC ]]; then
         printf '\n# ZSH, load and run bashcompinit before calling the complete function.\n' >> $SHRC
@@ -114,9 +117,17 @@ fi
 
 printf '\nsource ${HOME}/.customrc\n' >> $SHRC
 
+printf '\n# Load default aws profile using aws-profile script\n' >> $SHRC
+printf 'aws-profile-default\n' >> $SHRC
+
+
 # update zsh with my customizations
 sed -i -r 's/^(ZSH_THEME=).*$/\1"robinho"/' $SHRC
 sed -i -r 's/^(plugins=).*$/\1(git npm python-prompt tmux wd zsh-autosuggestions)/' $SHRC
+
+# install docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
 ###### Configs
 sudo timedatectl set-ntp true  # enable ntp on timedate

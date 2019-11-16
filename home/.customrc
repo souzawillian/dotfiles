@@ -12,6 +12,6 @@ HISTCONTROL=ignoreboth:erasedups
 
 
 # loading the aliases
-source ~/.aliases
-source ~/.chaordic-utils
 source ~/.env
+source ~/.chaordic-utils
+source ~/.aliases

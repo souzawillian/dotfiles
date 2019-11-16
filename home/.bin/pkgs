@@ -26,6 +26,7 @@ pulseaudio
 pulseaudio-alsa
 python
 python-pip
+redis
 rofi
 slack-desktop
 sublime-text-dev

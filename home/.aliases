@@ -43,6 +43,8 @@ function git_current_branch() {
   echo ${ref#refs/heads/}
 }
 
+alias gt='git tree'
+
 alias ga='git add'
 alias gaa='git add --all'
 
@@ -100,7 +102,7 @@ alias gsts='git stash save'
 # }}}
 # Golang aliases        ----------------------------------------------------- {{{
 
-alias gtest="go test (go list ./... | grep -v /vendor/)"
+alias gtest='go test $(go list ./... | grep -v /vendor/)'
 alias gocov='gtest -coverprofile=/tmp/coverage.out'
 alias gocv-html='go tool cover -html=/tmp/coverage.out'
 

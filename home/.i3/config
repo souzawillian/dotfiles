@@ -30,6 +30,7 @@ exec --no-startup-id pamac-tray
 exec --no-startup-id start_conky_maia
 exec --no-startup-id xautolock -time 5 -locker blurlock
 exec --no-startup-id pritunl-client-electron
+exec --no-startup-id slack
 
 exec_always --no-startup-id ff-theme-utilf
 exec_always --no-startup-id fix_xcursor
@@ -227,22 +228,22 @@ bindsym $mod+d exec --no-startup-id dmenu_recency
 bindsym $mod+z exec --no-startup-id morc_menu
 
 # Start Applications
-bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
-bindsym $mod+F1 exec code
-bindsym $mod+F2 exec google-chrome-stable
-bindsym $mod+F3 exec firefox
-bindsym $mod+F4 exec pcmanfm
-# bindsym $mod+F3 exec ranger
-bindsym $mod+Shift+F3 exec gksu pcmanfm
-bindsym $mod+F5 exec terminal -e 'mocp'
-bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -b
-bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
-bindsym $mod+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
-bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
+bindsym $mod+Ctrl+b         exec terminal -e 'bmenu'
+# bindsym $mod+F1             exec code
+bindsym $mod+F2             exec google-chrome-stable
+bindsym $mod+F3             exec firefox
+# bindsym $mod+F3           exec ranger
+# bindsym $mod+Shift+F3       exec gksu pcmanfm
+bindsym $mod+Ctrl+e         exec pcmanfm
+bindsym $mod+F5             exec terminal -e 'mocp'
+bindsym $mod+t              exec --no-startup-id pkill compton
+bindsym $mod+Ctrl+t         exec --no-startup-id compton -b
+bindsym $mod+Shift+d        --release exec "killall dunst; exec notify-send 'restart dunst'"
+bindsym Print               exec --no-startup-id i3-scrot
+bindsym $mod+Print          --release exec --no-startup-id i3-scrot -w
+bindsym $mod+Shift+Print    --release exec --no-startup-id i3-scrot -s
+bindsym $mod+Shift+h        exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
+bindsym $mod+Ctrl+x         --release exec --no-startup-id xkill
 
 # }}}
 # App Specs             ----------------------------------------------------- {{{
