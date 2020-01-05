@@ -4,3 +4,5 @@
 [alias]
 	tree = log --all --graph --decorate --pretty=oneline --abbrev-commit
 	ignore = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+[commit]
+	template = /home/williansouza/.gitmessage

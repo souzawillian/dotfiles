@@ -1,0 +1,30 @@
+# 50-character subject line #######################
+Subject
+# 72-character wrapped longer description. This should answer: ########
+Problem
+#   * Why was this change necessary?
+#   * How does it address the problem?
+#   * Are there any side effects?
+#
+# Include a link to the ticket, if any.
+# Add co-authors if you worked on this code with others:
+#
+# Co-authored-by: Full Name <email@example.com>
+#======================================================================
+# The type and scope should always be lowercase as shown below.#
+# ex.
+#       fix(middleware): ensure Range headers adhere more closely to RFC 2616
+#
+#       Add one new dependency, use `range-parser` (Express dependency) to compute
+#       range. It is more well-tested in the wild.
+#
+#       Fixes #2310
+#
+# ref. KARMA(http://karma-runner.github.io/4.0/dev/git-commit-msg.html):
+#   * feat (new feature for the user, not a new feature for build script)
+#   * fix (bug fix for the user, not a fix to a build script)
+#   * docs (changes to the documentation)
+#   * style (formatting, missing semi colons, etc; no production code change)
+#   * refactor (refactoring production code, eg. renaming a variable)
+#   * test (adding missing tests, refactoring tests; no production code change)
+#   * chore (updating grunt tasks etc; no production code change)
