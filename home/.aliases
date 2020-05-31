@@ -5,6 +5,7 @@
 
 alias h='history'
 alias grubconf='sudo grub-mkconfig -o /boot/grub/grub.cfg'
+alias pa-rs='~/.bin/pa-restart.sh'
 
 # load ssh agent to use ssh -A
 alias sshagent="eval (ssh-agent -c); ssh-add ~/.ssh/id_rsa"
@@ -107,6 +108,20 @@ alias gsts='git stash save'
 alias gtest='go test $(go list ./... | grep -v /vendor/)'
 alias gocov='gtest -coverprofile=/tmp/coverage.out'
 alias gocv-html='go tool cover -html=/tmp/coverage.out'
+
+# }}}
+# AWS                   ----------------------------------------------------- {{{
+
+alias aws-dc='aws --profile dc'
+alias aws-dc-login='aws --profile dc sso login'
+alias aws-prod='aws --profile prod'
+alias aws-prod-login='aws --profile prod sso login'
+alias aws-fs='aws --profile fs'
+alias aws-fs-login='aws --profile fs sso login'
+
+alias aws-dc-envs='eval $(aws-fuzzy sso login -p dc)'
+alias aws-prod-envs='eval $(aws-fuzzy sso login -p prod)'
+alias aws-fs-envs='eval $(aws-fuzzy sso login -p fs)'
 
 # }}}
 # Tmux                  ----------------------------------------------------- {{{

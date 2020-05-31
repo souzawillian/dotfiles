@@ -27,23 +27,24 @@ if [[ ! -d /usr/local/go ]]; then
   printf 'export PATH="$PATH:${HOME}/go/bin"\n' >> $SHRC
 fi
 
+SYNC_REPO="${HOME}/Cloud/sync"
 # sync sensitive - not versioned - dotfiles
 ln -sf "${HOME}/Dropbox" "${HOME}/Cloud"
-ln -sf "${HOME}/Cloud/sync/history" "${HOME}/.history"
-ln -sf "${HOME}/Cloud/sync/env" "${HOME}/.env"
-ln -sf "${HOME}/Cloud/sync/chaordic-utils" "${HOME}/.chaordic-utils"
-ln -sf "${HOME}/Cloud/sync/ssh_config ${HOME}/.ssh/config"
+ln -sf "${SYNC_REPO}/history" "${HOME}/.history"
+ln -sf "${SYNC_REPO}/env" "${HOME}/.env"
+ln -sf "${SYNC_REPO}/chaordic-utils" "${HOME}/.chaordic-utils"
+ln -sf "${SYNC_REPO}/ssh_config" "${HOME}/.ssh/config"
+ln -sf "${SYNC_REPO}/dc-ansible-vault" "${HOME}/.vault-password-dc-ansible"
+ln -sf "${SYNC_REPO}/pritunl_client/b138e3d4304347949a36b100b521f0f3.ovpn" "${HOME}/.config/pritunl_client/profiles/b138e3d4304347949a36b100b521f0f3.ovpn"
 # AWS credentials
-ln -sf "${HOME}/Cloud/sync/aws_config/config" "${HOME}/.aws/config"
-ln -sf "${HOME}/Cloud/sync/aws_config/credential.chaordic-dc ${HOME}/.aws/credential.chaordic-dc"
-ln -sf "${HOME}/Cloud/sync/aws_config/credential.ci-jake ${HOME}/.aws/credential.ci-jake"
-ln -sf "${HOME}/Cloud/sync/aws_config/credential.prod-chaordic ${HOME}/.aws/credential.prod-chaordic"
-ln -sf "${HOME}/Cloud/sync/aws_config/.aws-profile.json ${HOME}/.aws-profile.json"
+ln -sf "${SYNC_REPO}/aws_config/config" "${HOME}/.aws/config"
+ln -sf "${SYNC_REPO}/circleci_config/cli.yml" "${HOME}/.circleci/cli.yml"
 
-# ln -sf ${HOME}/Cloud/sync/copyq.conf ${HOME}/.config/copyq/copyq.conf
+ln -sf "${SYNC_REPO}/ProgramasRFB" "${HOME}/ProgramasRFB"
+# ln -sf ${SYNC_REPO}/copyq.conf ${HOME}/.config/copyq/copyq.conf
 
-echo "[ bootstrap ] :: Include new repo pritunl vpn client to pacman"
 if grep -qxF '[multilib]' /etc/pacman.conf; then
+    echo "[ bootstrap ] :: Include new repo pritunl vpn client to pacman"
     sudo tee -a /etc/pacman.conf << EOF
 [pritunl]
 Server = https://repo.pritunl.com/stable/pacman
@@ -53,8 +54,8 @@ EOF
     sudo pacman-key --lsign-key 7568D9BB55FF9E5287D586017AE645C0CF8E292A
 fi
 
-echo "[ bootstrap ] :: Installing pacman/aur packages"
 for PKG in $(cat $PKGLIST); do
+    echo "[ bootstrap ] :: Installing pacman/aur packages"
     pacaur -S --needed --noedit --noconfirm ${PKG} || echo "$PKG failed." >> $PKGLOG
 done
 
@@ -63,8 +64,8 @@ if [ -x "$(command -v subl3)" ]; then
     sudo mv "${old_subl}" "$(echo ${old_subl} | sed 's/subl3/subl/')"
 fi
 
-# install oh-my-zsh
 if [ ! -d ${HOME}/.oh-my-zsh ]; then
+    echo "[ bootstrap ] :: Install oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     git clone "https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 fi
