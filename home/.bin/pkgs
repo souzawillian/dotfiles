@@ -13,8 +13,8 @@ jdk-openjdk
 jq
 make
 ncdu
-network-manager-applet
 networkmanager
+network-manager-applet
 ngrep
 nmap
 ntp
@@ -28,6 +28,7 @@ python
 python-pip
 redis
 rofi
+sbt
 slack-desktop
 sublime-text-dev
 termite
