@@ -73,11 +73,11 @@ alias gd='git diff'
 alias gdc='git diff --cached'
 
 alias gf='git fetch'
-alias gfa='git fetch --all --prune'
+alias gfa='git fetch --all --prune --tags'
 alias gfo='git fetch origin'
 
 alias gp='git push'
-alias ggpush="git push origin $(git_current_branch)"
+alias ggpush="git push -u origin HEAD"
 
 alias gl='git pull'
 
@@ -133,6 +133,10 @@ alias ta='tmux attach -t'
 alias tk='tmux kill-session -t'
 
 # }}}
+# Kubernetes            ----------------------------------------------------- {{{
+alias k='kubectl'
+# }}}
+
 # Stuffs                ----------------------------------------------------- {{{
 
 # info about open windows

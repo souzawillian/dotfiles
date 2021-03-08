@@ -21,7 +21,7 @@ sudo pacman -S --noconfirm --needed pacaur git
 # install GOLANG
 if [[ ! -d /usr/local/go ]]; then
   echo "[ bootstrap ] :: Installing GOLANG"
-  curl "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" | tar xzf -C /usr/local
+  curl "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" | tar xz -C /usr/local
   printf "\n# Configure GOLANG\n" >> $SHRC
   printf 'export PATH="$PATH:/usr/local/go/bin"\n' >> $SHRC
   printf 'export PATH="$PATH:${HOME}/go/bin"\n' >> $SHRC
